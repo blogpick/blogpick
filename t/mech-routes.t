@@ -1,23 +1,22 @@
-use Test::More;
-use strict;
-use warnings;
+use Test::Most;
 
-use Test::WWW::Mechanize::PSGI;
-
-use_ok 'Blogpick';
-
-my $mech = Test::WWW::Mechanize::PSGI->new(
-  app => Blogpick->to_psgi_app
+use Blogpick 'bp';
+use Test::Mech;
+use Data::Dumper 'Dumper';
+#warn Dumper bp;
+my $mech = Test::Mech->new(
+  app => bp->router->to_psgi,
 );
+my $ret = $mech->get('/');
+warn Dumper $ret;
+eq_or_diff($mech->get('/'),"Hello World");
+eq_or_diff($mech->get('/login'),"Hello World");
+eq_or_diff($mech->get('/blog'),"Hello World");
+eq_or_diff($mech->get('/blog/foo'),"Hello World");
+eq_or_diff($mech->get('/blog/foo/tag'),"Hello World");
+eq_or_diff($mech->get('/blog/foo/tag/bar'),"Hello World");
+eq_or_diff($mech->get('/blog/foo/tag/baz'),"Hello World");
 
-$mech->get_ok('/');
-$mech->get_ok('/login');
-$mech->get_ok('/blog');
-$mech->get_ok('/blog/foo');
-$mech->get_ok('/blog/foo/tag');
-$mech->get_ok('/blog/foo/tag/bar');
-$mech->get_ok('/blog/foo/tag/baz');
-
-$mech->post_ok('/login');
+eq_or_diff($mech->post('/login'),"Hello World");
 
 done_testing;

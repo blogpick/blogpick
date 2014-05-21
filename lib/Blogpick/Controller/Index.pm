@@ -2,7 +2,7 @@ package Blogpick::Controller::Index;
 
 use Moo;
 
-sub index_GET {
+sub index {
   my ($self, $req) = @_;
   "Hello World";
 }

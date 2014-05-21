@@ -2,8 +2,9 @@ package Blogpick::Controller::Post;
 
 use Moo;
 
-sub get_GET {
+sub get {
   my ($self, $req) = @_;
+  "Hello World";
 }
 
 1

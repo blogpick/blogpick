@@ -2,12 +2,12 @@ package Blogpick::Controller::Blog;
 
 use Moo;
 
-sub all_GET {
+sub all {
   my ($self, $req) = @_;
   return "Hello World";
 }
 
-sub get_GET {
+sub get {
   my ($self, $req) = @_;
   return "Hello World";
 }

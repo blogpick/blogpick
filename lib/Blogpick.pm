@@ -1,58 +1,93 @@
-
 package Blogpick;
 
 # ABSTRACT: Blogpick: Blogging software that doesn't suck
 
-use OX;
-use OX::RouteBuilder::REST;
+my $_inst = Blogpick->new;
+sub bp { $_inst; }
 
-has indexc => (
-  is => 'ro',
-  isa => 'Blogpick::Controller::Index',
-#  lifecycle => 'singleton',
-);
+use Blogpick::Config;
+use Blogpick::Controller;
+use Blogpick::Router;
+use Data::Dumper 'Dumper';
 
-has authc => (
-  is => 'ro',
-  isa => 'Blogpick::Controller::Auth',
-#   lifecycle => 'singleton',
-);
-
-has blogc => (
-   is => 'ro',
-  isa => 'Blogpick::Controller::Blog',
-#  lifecycle => 'singleton',
-);
-
-has tagc => (
-  is => 'ro',
-  isa => 'Blogpick::Controller::Tag',
-#  lifecycle => 'singleton',
-);
-
-has postc => (
-  is => 'ro',
-  isa => 'Blogpick::Controller::Post',
-#  lifecycle => 'singleton',
-);
-
-my $router = router as {
-  route '/' => 'REST.indexc.index';
-  route '/login' => 'REST.authc.login';
-  route '/blog' => 'REST.blogc.all';
-  route '/blog/:blog' => 'REST.blogc.get';
-  route '/blog/:blog/tag' => 'REST.tagc.all';
-  route '/blog/:blog/tag/:tag' => 'REST.tagc.get';
-  route '/blog/:blog/:year' => 'REST.blogc.year';
-  route '/blog/:blog/:year/:slug' => 'REST.postc.get';
+use Sub::Exporter -setup => {
+  exports => ['bp'],
 };
 
-sub to_psgi_app {
-  return $router;
+use Moo;
+
+has config => (
+  is => 'ro',
+  lazy => 1,
+  builder => '_build_config',
+);
+
+has config_file => (
+  is => 'ro',
+  lazy => 1,
+  default => sub {'/Users/james/code/blogpick/config'},
+);
+
+has config_include_path => (
+  is => 'ro',
+  lazy => 1,
+  default => sub {'/Users/james/code/blogpick/includes'},
+);
+
+has conf => (
+  is => 'ro',
+  lazy => 1,
+  builder => '_build_conf',
+);
+
+has confject => (
+  is => 'ro',
+  lazy => 1,
+  builder => '_build_confject',
+);
+
+has router => (
+  is => 'ro',
+  init_arg => undef,
+  lazy => 1,
+  builder => '_build_router',
+);
+
+has controller => (
+  is => 'ro',
+  lazy => 1,
+  builder => '_build_controller',
+);
+
+########## BUILDERS ##########
+
+sub _build_config {
+  return Blogpick::Config->new
 }
 
-sub run {
-  $router->();
+sub _build_conf {
+  my $self = shift;
+  my $ret = $self->config->read_stems([$self->config_file],'include',$self->config_include_path,'r');
+  $ret;
+}
+
+sub _build_confject {
+  my $self = shift;
+  my $ret = $self->config->_process($self->conf);
+  warn "Built confject: " . Dumper $ret;
+  $ret;
+}
+sub _build_controller {
+  return Blogpick::Controller->new;
+}
+sub _build_router {
+  return Blogpick::Router->new;
+}
+
+########## METHODS ##########
+
+sub to_psgi {
+  return shift->router->to_psgi;
 }
 
 1
