@@ -1,0 +1,6 @@
+---
+appname: Blogpick
+layout: main
+charset: utf-8
+routing:
+  include: routing

@@ -1,0 +1,45 @@
+---
+default:
+  style: friendly
+routes:
+  - path: /
+    method: GET
+    action: Blogpick.Controller.Blog.all
+  - path: /blog
+    method: GET
+    action: Blogpick.Controller.Blog.all
+  - path: /blog/:blog
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+    action: Blogpick.Controller.Blog.get
+  - path: /blog/:blog/tag
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+    action: Blogpick.Controller.Tag.all
+  - path: /blog/:blog/tag/:tag
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+      tag: '[a-z-]+'
+    action: Blogpick.Controller.Tag.get
+  - path: /blog/:blog/:year/
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+      year: '[0-9]{4}'
+    action: Blogpick.Controller.Blog.get
+  - path: /blog/:blog/:year/:slug
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+      year: '[0-9]{4}'
+      slug: '[a-z-]+'
+    action: Blogpick.Controller.Post.get
+  - path: /login
+    method: GET
+    action: Blogpick.Controller.Auth.login_GET
+  - path: /login
+    method: POST
+    action: Blogpick.Controller.Auth.login_POST

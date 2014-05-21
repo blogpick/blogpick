@@ -1,0 +1,45 @@
+---
+configuration:
+  style: friendly
+routes:
+  - path: /
+    method: GET
+    action: blogpick.controllers.blog.all
+  - path: /blog
+    method: GET
+    action: blogpick.controllers.blog.all
+  - path: /blog/:blog
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+    action: blogpick.controllers.blog.get
+  - path: /blog/:blog/tag
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+    action: blogpick.controllers.tag.all
+  - path: /blog/:blog/tag/:tag
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+      tag: '[a-z-]+'
+    action: blogpick.controllers.tag.get
+  - path: /blog/:blog/:year/
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+      year: '[0-9]{4}'
+    action: blogpick.controllers.blog.get
+  - path: /blog/:blog/:year/:slug
+    method: GET
+    rules:
+      blog: '[a-z-]+'
+      year: '[0-9]{4}'
+      slug: '[a-z-]+'
+    action: blogpick.controllers.post.get
+  - path: /login
+    method: GET
+    action: blogpick.controllers.auth.login_GET
+  - path: /login
+    method: POST
+    action: blogpick.controllers.auth.login_POST
