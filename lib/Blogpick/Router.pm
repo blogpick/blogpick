@@ -8,7 +8,7 @@ use Carp qw(carp cluck croak confess);
 use Module::Load;
 use Data::Dumper 'Dumper';
 
-use Moose;
+use Moo;
 
 has router => (
   is => 'ro',

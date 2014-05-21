@@ -1,6 +1,6 @@
 package Blogpick::Controller;
 
-use Moose;
+use Moo;
 
 has index => (
   is => 'ro',
