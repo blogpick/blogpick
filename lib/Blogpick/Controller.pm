@@ -29,12 +29,6 @@ has post => (
 
 ########## BUILDERS ##########
 {
-  use Blogpick::Controller::Index;
-  sub _build_index {
-	return Blogpick::Controller::Index->new;
-  }
-}
-{
   use Blogpick::Controller::Auth;
   sub _build_auth {
 	return Blogpick::Controller::Auth->new;
